@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قرعه‌کشی کانون کتاب ترنج</title>
+  <style>
+    :root{
+      --green:#2e8b57;
+      --orange:#ff7a2d;
+      --cream:#f7f1e1;
+      --dark:#2b2b2b;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:"Vazir","Tahoma",sans-serif;
+      background:linear-gradient(180deg,var(--cream),#fff);
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .card{
+      width:100%;
+      max-width:720px;
+      background:#fff;
+      border-radius:18px;
+      padding:24px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
+      text-align:center;
+    }
+    h1{margin:0 0 8px;color:var(--dark)}
+    p.lead{color:#555;margin-top:0}
+    .image-placeholder{
+      width:220px;
+      height:140px;
+      background:linear-gradient(135deg,var(--green),var(--orange));
+      border-radius:12px;
+      margin:18px auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight:700;
+    }
+    .btn{
+      background:var(--green);
+      color:#fff;
+      padding:12px 18px;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-weight:700;
+      margin-top:12px;
+    }
+    .btn:active{transform:translateY(1px)}
+    .number-display{
+      font-size:64px;
+      font-weight:900;
+      margin:18px 0;
+      color:var(--dark);
+      min-height:92px;
+    }
+    .note{color:#555;margin-top:10px;}
+    .confetti-piece{
+      position:fixed;top:-10%;
+      width:10px;height:18px;
+      border-radius:2px;
+      opacity:.9;
+      pointer-events:none;
+      z-index:9999;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>قرعه‌کشی کانون کتاب ترنج</h1>
+    <p class="lead">برای شرکت در قرعه‌کشی روی تصویر زیر کلیک کنید</p>
+
+    <!-- جای عکس -->
+    <div id="imageBox" class="image-placeholder">جای عکس</div>
+
+    <button id="startBtn" class="btn">شرکت در قرعه‌کشی</button>
+
+    <div class="number-display" id="numberDisplay">—</div>
+    <p class="note" id="note">بعد از دریافت کد، اگر دوباره اسکن کنی همان کد نمایش داده می‌شود.</p>
+  </div>
+
+  <script>
+    const API_BASE = "https://script.google.com/macros/s/PUT-YOUR-WEB-APP-URL-HERE/exec";
+
+    function getBrowserId(){
+      let id = localStorage.getItem('raffle_browser_id');
+      if(!id){
+        id = crypto.randomUUID();
+        localStorage.setItem('raffle_browser_id',id);
+      }
+      return id;
+    }
+    function saveLocal(token,number){
+      localStorage.setItem('raffle_token',token);
+      localStorage.setItem('raffle_number',number);
+    }
+    function getLocal(){
+      return {token:localStorage.getItem('raffle_token'), number:localStorage.getItem('raffle_number')};
+    }
+
+    const numberDisplay=document.getElementById('numberDisplay');
+    const note=document.getElementById('note');
+    const startBtn=document.getElementById('startBtn');
+    const imageBox=document.getElementById('imageBox');
+
+    async function assignNumber(){
+      const browserId=getBrowserId();
+      const local=getLocal();
+      let url=API_BASE+'?api=assign&browserId='+browserId;
+      if(local.token) url+='&token='+local.token;
+      const res=await fetch(url);
+      return await res.json();
+    }
+
+    async function handleClick(){
+      startBtn.disabled=true;
+      startBtn.textContent='در حال انتخاب...';
+      const res=await assignNumber();
+      if(!res.ok){
+        numberDisplay.textContent='❌';
+        note.textContent='خطا: '+(res.error||'مشکلی پیش آمده');
+        startBtn.disabled=false;
+        return;
+      }
+      await rollingEffect(res.number);
+      saveLocal(res.token,res.number);
+      note.textContent='کد شانس شما: '+res.number;
+      launchConfetti();
+      startBtn.textContent='نمایش مجدد کد';
+      startBtn.disabled=false;
+    }
+
+    async function rollingEffect(finalNumber){
+      return new Promise(resolve=>{
+        let start=Date.now();
+        const dur=2500;
+        const tick=()=>{
+          const t=Date.now()-start;
+          if(t>=dur){
+            numberDisplay.textContent=finalNumber;
+            resolve();
+            return;
+          }
+          const fake=Math.floor(Math.random()*9999);
+          numberDisplay.textContent=fake;
+          requestAnimationFrame(tick);
+        };
+        tick();
+      });
+    }
+
+    function launchConfetti(){
+      const colors=['#2e8b57','#ff7a2d','#f7f1e1','#ffd166','#06d6a0'];
+      for(let i=0;i<40;i++){
+        const c=document.createElement('div');
+        c.className='confetti-piece';
+        c.style.left=Math.random()*100+'%';
+        c.style.background=colors[Math.floor(Math.random()*colors.length)];
+        document.body.appendChild(c);
+        const dur=3000+Math.random()*2000;
+        c.animate([{transform:'translateY(0)'},{transform:'translateY(100vh)'}],{duration:dur,easing:'ease-out'});
+        setTimeout(()=>c.remove(),dur);
+      }
+    }
+
+    startBtn.addEventListener('click',handleClick);
+    imageBox.addEventListener('click',()=>startBtn.click());
+  </script>
+</body>
+</html>
