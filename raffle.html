@@ -3,177 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>قرعه‌کشی کانون کتاب ترنج</title>
+  <title>قرعه‌کشی ترنج 🎁</title>
   <style>
-    :root{
-      --green:#2e8b57;
-      --orange:#ff7a2d;
-      --cream:#f7f1e1;
-      --dark:#2b2b2b;
+    @import url('https://cdn.jsdelivr.net/gh/rastikerdar/iransans@v4.1.0/dist/IRANSansWeb.css');
+
+    body {
+      font-family: 'IRANSans', sans-serif;
+      background: linear-gradient(135deg, #f0f9f0, #fff8e1);
+      color: #333;
+      text-align: center;
+      padding: 30px;
+      overflow-x: hidden;
     }
-    *{box-sizing:border-box}
-    body{
-      font-family:"Vazir","Tahoma",sans-serif;
-      background:linear-gradient(180deg,var(--cream),#fff);
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
+
+    header img {
+      width: 120px;
+      margin-bottom: 20px;
     }
-    .card{
-      width:100%;
-      max-width:720px;
-      background:#fff;
-      border-radius:18px;
-      padding:24px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.08);
-      text-align:center;
+
+    h1 {
+      color: #2e7d32;
+      font-size: 28px;
+      margin-bottom: 10px;
     }
-    h1{margin:0 0 8px;color:var(--dark)}
-    p.lead{color:#555;margin-top:0}
-    .image-placeholder{
-      width:220px;
-      height:140px;
-      background:linear-gradient(135deg,var(--green),var(--orange));
-      border-radius:12px;
-      margin:18px auto;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-weight:700;
+
+    p {
+      color: #555;
+      font-size: 18px;
+      margin-bottom: 25px;
     }
-    .btn{
-      background:var(--green);
-      color:#fff;
-      padding:12px 18px;
-      border-radius:10px;
-      border:0;
-      cursor:pointer;
-      font-weight:700;
-      margin-top:12px;
+
+    #lotteryImage {
+      width: 220px;
+      height: 220px;
+      border-radius: 15px;
+      background-color: #fff3e0;
+      border: 3px solid #ff9800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px auto;
+      cursor: pointer;
+      transition: transform 0.3s;
+      font-size: 16px;
+      color: #ff9800;
     }
-    .btn:active{transform:translateY(1px)}
-    .number-display{
-      font-size:64px;
-      font-weight:900;
-      margin:18px 0;
-      color:var(--dark);
-      min-height:92px;
+
+    #lotteryImage:hover {
+      transform: scale(1.05);
     }
-    .note{color:#555;margin-top:10px;}
-    .confetti-piece{
-      position:fixed;top:-10%;
-      width:10px;height:18px;
-      border-radius:2px;
-      opacity:.9;
-      pointer-events:none;
-      z-index:9999;
+
+    #numberBox {
+      font-size: 50px;
+      color: #2e7d32;
+      font-weight: bold;
+      display: none;
+      margin-top: 20px;
+    }
+
+    #message {
+      font-size: 20px;
+      color: #ff9800;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #homeButton {
+      display: none;
+      margin-top: 25px;
+      background-color: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    #homeButton:hover {
+      background-color: #388e3c;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      top: -10px;
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>قرعه‌کشی کانون کتاب ترنج</h1>
-    <p class="lead">برای شرکت در قرعه‌کشی روی تصویر زیر کلیک کنید</p>
 
-    <!-- جای عکس -->
-    <div id="imageBox" class="image-placeholder">جای عکس</div>
+  <header>
+    <img src="logo.png" alt="لوگوی کانون کتاب ترنج">
+    <h1>قرعه‌کشی ترنج 🎁</h1>
+    <p>برای شرکت در قرعه‌کشی روی شکل زیر کلیک کنید</p>
+  </header>
 
-    <button id="startBtn" class="btn">شرکت در قرعه‌کشی</button>
-
-    <div class="number-display" id="numberDisplay">—</div>
-    <p class="note" id="note">بعد از دریافت کد، اگر دوباره اسکن کنی همان کد نمایش داده می‌شود.</p>
+  <div id="lotteryImage" onclick="startLottery()">
+    جای عکس قرعه‌کشی شما
   </div>
 
+  <div id="numberBox"></div>
+  <div id="message">کد شانس شما ثبت شد 🎉</div>
+  <button id="homeButton" onclick="goHome()">بازگشت به خانه</button>
+
   <script>
-    const API_BASE = "https://script.google.com/macros/s/PUT-YOUR-WEB-APP-URL-HERE/exec";
+    let used = localStorage.getItem("torangUser") ? true : false;
+    let storedNumber = localStorage.getItem("torangNumber");
 
-    function getBrowserId(){
-      let id = localStorage.getItem('raffle_browser_id');
-      if(!id){
-        id = crypto.randomUUID();
-        localStorage.setItem('raffle_browser_id',id);
-      }
-      return id;
-    }
-    function saveLocal(token,number){
-      localStorage.setItem('raffle_token',token);
-      localStorage.setItem('raffle_number',number);
-    }
-    function getLocal(){
-      return {token:localStorage.getItem('raffle_token'), number:localStorage.getItem('raffle_number')};
-    }
-
-    const numberDisplay=document.getElementById('numberDisplay');
-    const note=document.getElementById('note');
-    const startBtn=document.getElementById('startBtn');
-    const imageBox=document.getElementById('imageBox');
-
-    async function assignNumber(){
-      const browserId=getBrowserId();
-      const local=getLocal();
-      let url=API_BASE+'?api=assign&browserId='+browserId;
-      if(local.token) url+='&token='+local.token;
-      const res=await fetch(url);
-      return await res.json();
-    }
-
-    async function handleClick(){
-      startBtn.disabled=true;
-      startBtn.textContent='در حال انتخاب...';
-      const res=await assignNumber();
-      if(!res.ok){
-        numberDisplay.textContent='❌';
-        note.textContent='خطا: '+(res.error||'مشکلی پیش آمده');
-        startBtn.disabled=false;
+    function startLottery() {
+      if (used) {
+        alert("شما قبلاً در قرعه‌کشی شرکت کرده‌اید! کد شانس شما: " + storedNumber);
+        document.getElementById("numberBox").textContent = storedNumber;
+        document.getElementById("numberBox").style.display = "block";
+        document.getElementById("message").style.display = "block";
+        document.getElementById("homeButton").style.display = "inline-block";
         return;
       }
-      await rollingEffect(res.number);
-      saveLocal(res.token,res.number);
-      note.textContent='کد شانس شما: '+res.number;
-      launchConfetti();
-      startBtn.textContent='نمایش مجدد کد';
-      startBtn.disabled=false;
+
+      used = true;
+      const finalNum = Math.floor(Math.random() * 300) + 1;
+      localStorage.setItem("torangUser", "true");
+      localStorage.setItem("torangNumber", finalNum);
+
+      const box = document.getElementById("numberBox");
+      const msg = document.getElementById("message");
+      const home = document.getElementById("homeButton");
+      box.style.display = "block";
+
+      let count = 0;
+      const interval = setInterval(() => {
+        box.textContent = Math.floor(Math.random() * 300) + 1;
+        count++;
+        if (count > 30) {
+          clearInterval(interval);
+          box.textContent = finalNum;
+          msg.style.display = "block";
+          createConfetti();
+          setTimeout(() => home.style.display = "inline-block", 2000);
+        }
+      }, 100);
     }
 
-    async function rollingEffect(finalNumber){
-      return new Promise(resolve=>{
-        let start=Date.now();
-        const dur=2500;
-        const tick=()=>{
-          const t=Date.now()-start;
-          if(t>=dur){
-            numberDisplay.textContent=finalNumber;
-            resolve();
-            return;
-          }
-          const fake=Math.floor(Math.random()*9999);
-          numberDisplay.textContent=fake;
-          requestAnimationFrame(tick);
-        };
-        tick();
-      });
-    }
-
-    function launchConfetti(){
-      const colors=['#2e8b57','#ff7a2d','#f7f1e1','#ffd166','#06d6a0'];
-      for(let i=0;i<40;i++){
-        const c=document.createElement('div');
-        c.className='confetti-piece';
-        c.style.left=Math.random()*100+'%';
-        c.style.background=colors[Math.floor(Math.random()*colors.length)];
-        document.body.appendChild(c);
-        const dur=3000+Math.random()*2000;
-        c.animate([{transform:'translateY(0)'},{transform:'translateY(100vh)'}],{duration:dur,easing:'ease-out'});
-        setTimeout(()=>c.remove(),dur);
+    function createConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = ["#ff9800", "#4caf50", "#ffc107"][Math.floor(Math.random() * 3)];
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
       }
     }
 
-    startBtn.addEventListener('click',handleClick);
-    imageBox.addEventListener('click',()=>startBtn.click());
+    function goHome() {
+      window.location.href = "index.html";
+    }
   </script>
+
 </body>
 </html>
