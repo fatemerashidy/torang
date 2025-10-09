@@ -8,7 +8,7 @@
     @import url('https://cdn.jsdelivr.net/gh/rastikerdar/iransans@v4.1.0/dist/IRANSansWeb.css');
 
     body {
-      font-family: 'IRANSans', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background: linear-gradient(135deg, #f0f9f0, #fff8e1);
       color: #333;
       text-align: center;
@@ -105,12 +105,26 @@
 <body>
 
   <header>
-    <img src="LOGO.png" alt="لوگوی کانون کتاب ترنج">
+    <img src="LOGO.png" alt="لوگوی کانون کتاب ترنج" style="
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    object-fit: cover;
+    border: 4px solid #fff;">
     <h1>قرعه‌کشی ترنج 🎁</h1>
-    <p>برای شرکت در قرعه‌کشی روی شکل زیر کلیک کنید</p>
+    <p>برای شرکت در قرعه‌کشی روی ترنجک کلیک کنید</p>
   </header>
 
-  <img src="torangak.png" id="lotteryImage" onclick="startLottery()">
+  <img src="torangak.png" id="lotteryImage" onclick="startLottery()" style="
+    width: 170px;
+    height: 170px;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    object-fit: cover;
+    border: 4px solid #fff;">
     
 
   <div id="numberBox"></div>
