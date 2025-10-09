@@ -105,14 +105,13 @@
 <body>
 
   <header>
-    <img src="logo.png" alt="لوگوی کانون کتاب ترنج">
+    <img src="LOGO.png" alt="لوگوی کانون کتاب ترنج">
     <h1>قرعه‌کشی ترنج 🎁</h1>
     <p>برای شرکت در قرعه‌کشی روی شکل زیر کلیک کنید</p>
   </header>
 
-  <div id="lotteryImage" onclick="startLottery()">
-    جای عکس قرعه‌کشی شما
-  </div>
+  <img src="torangak.png" id="lotteryImage" onclick="startLottery()">
+    
 
   <div id="numberBox"></div>
   <div id="message">کد شانس شما ثبت شد 🎉</div>
@@ -133,7 +132,7 @@
       }
 
       used = true;
-      const finalNum = Math.floor(Math.random() * 300) + 1;
+      const finalNum = Math.floor(Math.random() * 400) + 1;
       localStorage.setItem("torangUser", "true");
       localStorage.setItem("torangNumber", finalNum);
 
@@ -144,7 +143,7 @@
 
       let count = 0;
       const interval = setInterval(() => {
-        box.textContent = Math.floor(Math.random() * 300) + 1;
+        box.textContent = Math.floor(Math.random() * 400) + 1;
         count++;
         if (count > 30) {
           clearInterval(interval);
