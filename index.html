@@ -137,25 +137,22 @@
     }
   </style>
   <style>
-
-  .orange-btn {
-  display: flex;
-  flex-direction: column; /* متن و ایموجی زیر هم */
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 150px;
-  height: 150px;
+.orange-btn {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
   background: radial-gradient(circle at 30% 30%, #ffa500, #ff6f00);
   color: #fff;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+  text-align: center;
   text-decoration: none;
   border-radius: 50%;
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
   transition: transform 0.3s, box-shadow 0.3s;
   user-select: none;
-  padding: 10px;
+  position: relative;
 }
 
 .orange-btn:hover {
@@ -180,13 +177,7 @@
   <!-- محتوای اصلی -->
   <main>
     <!-- دکمه ورود به قرعه کشی -->
-<a href="raffle.html" class="orange-btn"style=" display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  background: linear-gradient(to bottom, #fff8e1, #f0f9f0);
-  font-family: IRANSans, sans-serif;">
+<a href="raffle.html" class="orange-btn">
   🎁 وارد قرعه‌کشی ترنج شو!
 </a>
 
@@ -243,6 +234,7 @@
 </body>
 
 </html>
+
 
 
 
